@@ -1,0 +1,142 @@
+
+
+
+
+{% extends "layout.html" %}
+{% block body %}
+
+
+<div
+class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+<h1 class="h2">Şirketler</h1>
+<div class="btn-toolbar mb-2 mb-md-0">
+  <div class="btn-group me-2">
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#myModal"
+    >
+      Cihaz Ekle
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Cihaz ekleme Paneli</h4>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+
+            <form action="/addcompany" method="post">
+              <div class="form-group">
+                  <label for="companyname">Şirket ismi</label>
+                  <input type="text" name="Company_name" class="form-control" id="companyname" placeholder="Şirket ismi">
+              </div>
+              <div class="form-group">
+                  <label for="devicecount">Cihaz Sayısı</label>
+                  <input type="number" name="DevicesCount" class="form-control" id="devicecount"  placeholder="Cihaz Sayısı">
+                    
+              </div>
+              <div class="form-group">
+                <label for="company_email">Email</label>
+                <input type="text" name="Email" class="form-control" id="company_email" placeholder="Şirket maili">
+            </div>
+              <button type="submit" class="btn btn-primary">Ekle</button>
+          </form>
+
+
+
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+  </div>
+  <!--   <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+<span data-feather="calendar"></span>
+This week
+</button> -->
+</div>
+</div>
+
+<!--  <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>-->
+{% if  companies== {} %}
+
+  <p>Şirket kaydı yoktur.</p>
+  {% else %}
+<div class="table-responsive">
+
+  
+<table class="table table-striped table-sm">
+  <thead>
+    <tr>
+      <th scope="col">İd</th>
+      <th scope="col">Şirket ismi</th>
+      <th scope="col">Cihaz Sayısı</th>
+      <th scope="col">Email</th>
+     
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in companies %}
+    <tr>
+      <td> {{ item["Company_id"] }}</td>
+      <td> {{ item["Company_name"] }}</td> 
+      <td> {{ item["DevicesCount"]|string }}</td>
+      <td> {{ item["Email"] }}</td>
+      <td> 
+
+          <!-- The Modal -->
+          <a href='/updatecompany/{{ item["Company_id"] }}' class="btn btn-warning btn-xs"data-bs-toggle="model" data-bs-target='#myModal{{ item["id"] }}'>Güncelle</a>
+          
+
+    <!-- Modal -->
+        <a href='/deletecompany/{{ item["Company_id"] }}' onclick="return confirm('Şirketi silmek  istiyormusun ?')" class="btn btn-danger">Sil</a>
+    </td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    {% for i in range(0,page_count) %}
+
+    <li class="page-item"><a class="page-link" href="http://0.0.0.0:5003/companies/{{ per_page }}/{{ i }}/">{{i+1}}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+   
+

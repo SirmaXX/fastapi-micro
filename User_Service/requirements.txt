@@ -1,0 +1,13 @@
+flask
+psycopg2-binary
+Flask-SQLAlchemy
+typing
+fastapi
+pydantic
+uvicorn
+python-multipart
+pytest
+celery
+Redis
+fastapi_router_controller
+httpx

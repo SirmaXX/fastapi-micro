@@ -1,0 +1,33 @@
+
+
+
+
+{% extends "layout.html" %}
+{% block body %}
+
+<div
+class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+<h1 class="h2">Kullanıcılar</h1>
+
+</div>
+<form action="/updateuser/{{ users['id']}}" method="post">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Kullanıcı</label>
+        <input type="hidden"  id="username" name="username" value="{{ users['username']}}">
+        <input type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder=" {{ users['username']}}">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Parola</label>
+        <input type="hidden"  id="password" name="password" value="{{ users['password']}}">
+        <input type="text" name="password" class="form-control" id="exampleInputEmail1" placeholder=" {{ users['password']}}">
+    </div>
+    <button type="submit" class="btn btn-primary">Ekle</button>
+</form>
+
+
+{% endblock %}
+
+
+   
+

@@ -1,0 +1,114 @@
+
+
+
+
+{% extends "layout.html" %}
+{% block body %}
+
+<div
+class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+<h1 class="h2">Uygulama paneli</h1>
+<div class="btn-toolbar mb-2 mb-md-0">
+  <div class="btn-group me-2">
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#myModal"
+    >
+      Uygulama
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Uygulama ekleme Paneli</h4>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+
+            <form method="POST" action="/addapp" enctype="multipart/form-data">
+              <div class="form-group">
+                  <label for="version_name">version name</label>
+                  <input type="text" name="version_name" class="form-control"  id="version_name" placeholder="version name">
+              </div>
+              <div class="form-group">
+                <label for="version_code">version code</label>
+                <input type="text" name="version_code" class="form-control"  id="version_code" placeholder="version code">
+            </div>
+              <div class="form-group">
+                  <label for="file">Apk dosyası </label>
+                  <input type="file" id="file" name="uploaded_file" class="form-control" >
+                    
+              </div>
+           
+              <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+  </div>
+  <!--   <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+<span data-feather="calendar"></span>
+This week
+</button> -->
+</div>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">softwareID</th>
+        <th scope="col">package_name</th>
+        <th scope="col">version_name</th>
+        <th scope="col">version_code</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in apps %}
+      <tr>
+        <td> {{ item["softwareID"] }}</td>
+        <td> {{ item["package_name"] }}</td>
+        <td> {{ item["version_name"] }}</td>
+        <td> {{ item["version_code"] }}</td>
+        <td> <a href='/deleteapp/{{ item["softwareID"] }}' onclick="return confirm('Uygulamayı silmek istiyormusun ?')" class="btn btn-danger">Sil</a></td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>
+
+
+
+{% endblock %}
+
+
+   
+

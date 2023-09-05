@@ -1,0 +1,29 @@
+
+
+
+
+{% extends "layout.html" %}
+{% block body %}
+
+<div
+class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+<h1 class="h2">Cihazlar</h1>
+
+</div>
+<form action="/updatedevice/{{ devices['id']}}" method="post">
+    <div class="form-group">
+        <label for="exampleInputEmail1">Cihaz ismi</label>
+        <input type="hidden"  id="cihazid" name="cihazid" value="{{ devices['id']}}">
+        <input type="text" name="cihazismi" class="form-control" id="exampleInputEmail1" placeholder=" {{ devices['device_name']}}">
+    </div>
+   
+    <button type="submit" class="btn btn-primary">Ekle</button>
+</form>
+
+
+{% endblock %}
+
+
+   
+

@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  apigateway:
+    container_name: ApiGateway
+    image: apigateway
+    build: ./ApiGateway
+    volumes:
+      - ./ApiGateway/:/app/
+    expose:
+      - 5003
+    ports:
+      - "5003:5003"
+    restart: on-failure
+
+
+
+  costumer:
+    container_name: costumers
+    image: costumers
+    build: ./Customer_Service
+    volumes:
+      - ./Customer_Service/:/app/
+    expose:
+      - 5001
+    ports:
+      - "5001:5001"
+    environment:
+       - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+    depends_on:
+       - db
+     
+    
+    
+  users:
+    container_name: users
+    image: users
+    build: ./User_Service
+    volumes:
+      - ./User_Service/:/app/
+    expose:
+      - 5001
+    ports:
+      - "5001:5001"
+    environment:
+       - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+    depends_on:
+       - db
+    
+
+  
+
+
+  log_service_1:
+    container_name: log_service_1
+    image: log
+    build: ./Log_manager/Log_Service
+    volumes:
+      - ./Log_manager/Log_Service/:/app/
+    expose:
+      - 5004
+    ports:
+      - "5004:5004"
+    environment:
+      - DB_URL=mongodb://admin:password@mongodb 
+
+
+
+  db:
+    container_name: db
+    image: postgres:12
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    command: -p 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+ 
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    ports:
+      - 27018:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-data:/data/db
+
+
+
+
+
+volumes:
+    pgdata: 
+    mongo-data:
+       driver: local
+  
+ 

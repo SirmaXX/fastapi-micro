@@ -1,0 +1,63 @@
+
+
+
+
+{% extends "layout.html" %}
+{% block body %}
+
+<div
+class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+>
+<h1 class="h2">Log Kayıtları</h1>
+
+</div>
+{% if  logs== {} %}
+
+<p>Log kaydı yoktur.</p>
+{% else %}
+<div class="table-responsive">
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">İd</th>
+        <th scope="col">LogType</th>
+        <th scope="col">Mesaj</th>
+        <th scope="col">Zaman</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in logs %}
+      <tr>
+        <td> {{ item["id"] }}</td>
+        <td> {{ item["logtype"] }}</td>
+        <td> {{ item["message"] }}</td>
+        <td> {{ item["create_time"] }}</td>
+      </tr>
+   
+      {% endfor %}
+
+       </tbody>
+
+  </table>
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+       {% for i in range(0,page_count) %}
+
+      <li class="page-item"><a class="page-link" href="http://0.0.0.0:5003/logs/{{ per_page }}/{{ i }}/">{{ i+1 }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+</div>
+
+
+
+
+{% endif %}
+
+{% endblock %}
+
+
+   
+

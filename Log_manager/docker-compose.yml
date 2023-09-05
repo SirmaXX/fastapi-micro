@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  log_service_1:
+    container_name: log_service_1
+    image: log
+    build: ./Log_manager/Log_Service
+    volumes:
+      - ./Log_manager/Log_Service/:/app/
+    expose:
+      - 5004
+    ports:
+      - "5004:5004"
+    environment:
+      - DB_URL=mongodb://admin:password@mongodb 
+
+
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    ports:
+      - 27018:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-data:/data/db
+
+      
+volumes:
+  mongo-data:
+    driver: local
+  
+ 

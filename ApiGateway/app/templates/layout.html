@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    {% block seo %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Rubu Cihaz yönetim paneli" />
+    <meta name="author" content="Rubuplus" />
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#000000" />
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#000000" />
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#000000" />
+    <title>Rubu Cihaz yönetim paneli</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href=qlalcehmy orm 
+    />
+    {% endblock %}
+
+    <link
+      href="{{ url_for('static', path='css/bootstrap.min.css') }}"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template -->
+    <link
+      href="{{ url_for('static', path='css/dashboard.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header
+      class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow"
+    >
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
+        <img
+          src="{{ url_for('static', path='img/logo-rubuplus-dark-bg.webp') }}"
+          width="120"
+      /></a>
+      <button
+        class="navbar-toggler position-absolute d-md-none collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#sidebarMenu"
+        aria-controls="sidebarMenu"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <input
+        class="form-control form-control-dark w-100"
+        type="text"
+        placeholder="Search"
+        aria-label="Search"
+      />
+      <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+          <a class="nav-link px-3" href="/logout">Sign out</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row">
+        {% block navbar %}
+        <nav
+          id="sidebarMenu"
+          class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse"
+        >
+          <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link text-light " aria-current="page" href="http://0.0.0.0:5003/index">
+                  <span data-feather="home"></span>
+                  Anasayfa
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="http://0.0.0.0:5003/logs">
+                  <span class="text-light" data-feather="file"></span>
+                 Logs
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="http://0.0.0.0:5002/market">
+                  <span class="text-light" data-feather="shopping-cart"></span>
+                  Uygulamalar
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="http://0.0.0.0:5003/users">
+                  <span class="text-light" data-feather="users"></span>
+                  Kullanıcılar
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  <span class="text-light" data-feather="bar-chart-2"></span>
+                 Sensör Verileri
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="http://0.0.0.0:5003/devices">
+                  <span class="text-light" data-feather="layers"></span>
+                  Cihazlar
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  <span class="text-light" data-feather="help-circle"></span>
+                  Destek Sayfası
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href="http://0.0.0.0:5003/login">
+                  <span class="text-light" data-feather="layers"></span>
+                  Login
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-light" href=" http://0.0.0.0:5003/companies">
+                  <span class="text-light" data-feather="award"></span>
+                  Şirketler
+                </a>
+              </li>
+         
+              
+            <!--  https://med.nu.ac.th/medpex/medpex/icons-feather.html  -->
+            </ul>
+        
+          </div>
+          
+        </nav>
+        {% endblock %}
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ek sayfa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bu sayfa daha sonra eklenecek.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+       
+      </div>
+    </div>
+  </div>
+</div>
+          {% block body %}{% endblock %}
+        </main>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', path='js/bootstrap.bundle.min.js') }}"></script>
+
+    <script src="{{ url_for('static', path='js/feather.min.js') }}"></script>
+    <!-- <script src="js/Chart.min.js" ></script>-->
+    <script src="{{ url_for('static', path='js/dashboard.js') }}"></script>
+  </body>
+</html>
