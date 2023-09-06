@@ -4,8 +4,7 @@ import starlette.status as status
 import urllib,json,requests
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse,RedirectResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+
 from typing import Optional,List
 from app.Routers.restapi import restapiroute
 from app.Lib.Api_User_Controller import Api_User_Controller
@@ -15,8 +14,7 @@ from app.Lib.common import paginate,pagecount
 app = FastAPI(title="arayüz", description="Rubu için admin paneli")
 
 
-templates = Jinja2Templates(directory="app/templates")
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
 
 app.include_router(restapiroute, prefix="/api")
 
@@ -31,62 +29,12 @@ Log_Url="http://log_service:5004/"
 @app.get("/")
 @app.get("/index")
 async def api_index(request: Request):
-   return templates.TemplateResponse("index.html", {"request": request})
+   return {"debug": "arayüz"}
 
 
 
 
 
-
-#UYGULAMALARIN REQUESTİ  BAŞLANGIÇ (DEAKTİF)
-"""
-@app.get("/market",description="uygulamaları listeleyen fonksiyon")
-async def api_market(request: Request):
-    response = urllib.request.urlopen(Market_Url+"apps")
-    data = response.read()
-    dict = json.loads(data)
-    return templates.TemplateResponse("market.html", {"request": request,"apps":dict})
-
-
-
-@app.get("/deleteapp/{id}",description="uygulama silen fonksiyon")
-async def deleteapp(request: Request,id:int):
-    url=Market_Url+'apps/delete/'+str(id)
-    response = requests.delete(url)
-    response
-    response1 = RedirectResponse(url='/market')
-    return response1  
-
-
-
-
-
-
-
-@app.post("/addapp",description="uygulama ekleme fonksiyonu")
-async def addapp(request: Request,version_name:str=Form(),version_code:str=Form(),uploaded_file: UploadFile = File(...)):  
-    # Open the APK file in binary mode
-    os.chdir("apps/")
-    test_file = open(uploaded_file.filename, "rb")
-   # Set the Content-Type header to 'application/vnd.android.package-archive'
-    headers = {'Content-Type': 'application/vnd.android.package-archive'}
-   # Set up the form data
-    payload =  {
-     "package_name":uploaded_file.name,
-     "version_name": version_name,
-     "version_code":version_code,
-    }
-    response= requests.post("http://marketplace:5002/apps/add", headers=headers,data = payload, files = {"file": test_file})
-    response
-    return RedirectResponse(
-         '/market', 
-        status_code=status.HTTP_302_FOUND)
-
-
-
-
-
-"""
 
 #UYGULAMALARIN REQUESTİ  BİTİŞ
 #KULLANICILARIN REQUESTİ  BAŞLANGIÇ

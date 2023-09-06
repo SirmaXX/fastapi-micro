@@ -3,7 +3,7 @@ from fastapi import APIRouter,Depends, Request,HTTPException
 from flask import jsonify
 from sqlalchemy.orm import Session
 import urllib,json,requests
-from app.Lib.schema import User_Schema,Device_Schema,Company_Schema
+from app.Lib.schema import User_Schema
 from app.Lib.Api_User_Controller import Api_User_Controller
 
 restapiroute = APIRouter(responses={404: {"description": "Not found"}})

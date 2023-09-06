@@ -10,7 +10,7 @@ class User_Schema(BaseModel):
 
     
     class Config:
-        orm_mode = True
+        from_attributes = True
         validate_assignment = True
 
 
@@ -20,7 +20,7 @@ class U_User_Schema(BaseModel):
     password : Optional[str]
  
     class Config:
-        orm_mode = True
+        from_attributes = True
         validate_assignment = True
 
 

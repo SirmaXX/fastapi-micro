@@ -61,14 +61,6 @@ class User(Base):
 
 
 
-class UserCompany(Base):
-     """Kullanıcıların şirketlere tanımlanması için oluşturulmuş tablo """
-     __tablename__ = "usercompany"
-    
-     id = Column(Integer, primary_key=True)
-     user_id = Column(Integer, ForeignKey("user.id" , ondelete="CASCADE"), primary_key=True)
-     company_id = Column(Integer, ForeignKey("company.Company_id", ondelete="CASCADE"), primary_key=True)
-
 
 
 
