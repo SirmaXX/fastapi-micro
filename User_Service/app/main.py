@@ -8,7 +8,7 @@ import os
 import json
 
 
-app = FastAPI(title="iş servisi", description="Cihazların,şirketlerin,kullanıcıların yönetimi için hazırlanan servis")
+app = FastAPI(title="kullanıcı servisi", description="Kullanıcıların bulunduğu servis")
 app.include_router(usersroute, prefix="/users")
 
 

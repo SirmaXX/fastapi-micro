@@ -9,10 +9,21 @@ from typing import Optional,List
 from app.Routers.restapi import restapiroute
 from app.Lib.Api_User_Controller import Api_User_Controller
 from app.Lib.common import paginate,pagecount
+from slowapi.errors import RateLimitExceeded
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
 
 
-app = FastAPI(title="arayüz", description="Rubu için admin paneli")
+limiter = Limiter(key_func=get_remote_address)
+app = FastAPI(title="apigateway", description="apigateway")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+
+@app.get("/home")
+@limiter.limit("5/minute")
+async def homepage(request: Request):
+    return { "message": "hello world" }
 
 
 
@@ -147,15 +158,10 @@ async def logs(request: Request):
     response = urllib.request.urlopen(Log_Url)
     data = response.read()
     dict = json.loads(data)
-    if dict == {}:
-              return templates.TemplateResponse("logs.html", {"request": request,"logs":dict})
-    elif len(dict) >0 and len(dict)<=10:
-         return templates.TemplateResponse("logs.html", {"request": request,"logs":dict,"page_count":1})
-    else:
-     per_page=3
-     page_count=pagecount(dict,per_page)
-     dataset=paginate(dict,per_page,0)
-     return templates.TemplateResponse("logs.html", {"request": request,"logs":dataset,"per_page":per_page,"page_count":page_count})
+    per_page=3
+    page_count=pagecount(dict,per_page)
+    dataset=paginate(dict,per_page,0)
+    return dataset
 
 
 
@@ -167,8 +173,8 @@ async def logsseperated(request: Request,pagenumber:int,per_page:int):
     data = response.read()
     dict = json.loads(data)
     if dict == {}:
-               return templates.TemplateResponse("paginates/privlog.html", {"request": request,"companies":dict})
+               return dict
     else:
        page_count=pagecount(dict,per_page)
        dataset=paginate(dict,per_page,pagenumber)
-       return templates.TemplateResponse("paginates/privlog.html", {"request": request,"logs":dataset,"per_page":per_page,"page_count":page_count})
+       return dataset

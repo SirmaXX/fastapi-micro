@@ -11,3 +11,4 @@ celery
 Redis
 requests
 httpx
+slowapi
