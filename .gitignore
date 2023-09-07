@@ -1,3 +1,4 @@
 __pycache__
 .pytest_cache
 ApiGateway/app/__pycache__/main.cpython-39.pyc
+User_Service/app/Routers/__pycache__/

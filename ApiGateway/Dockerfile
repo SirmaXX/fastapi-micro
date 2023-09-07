@@ -1,9 +1,19 @@
-FROM python:3.9
-COPY requirements.txt /app/
+FROM python:3.10
+
+# Set the working directory to /app
 WORKDIR /app
-RUN pip install -r requirements.txt
-COPY . /app
 
+# Copy requirements file to the container
+COPY requirements.txt .
+COPY main.py .
 
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["uvicorn", "--host", "0.0.0.0", "--reload", "--reload-dir", "/app", "app.main:app", "--port", "5003"]
+# Copy the rest of the app into the container
+COPY . .
+
+# Expose port 8000
+EXPOSE 5003
+
+CMD ["python3", "main.py"]
