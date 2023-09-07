@@ -7,30 +7,10 @@ from app.Routers.users import usersroute
 import os
 import json
 
-
-app = FastAPI(title="kullanıcı servisi", description="Kullanıcıların bulunduğu servis")
-app.include_router(usersroute, prefix="/users")
-
-
-
-
-@app.get("/health",description="servisin çalışıp çalışmadığını kontrol eden router")
-async def health(req: Request): 
-    health=True
-    if health==True:
-        return True
-    else:
-        return None
-
-
-
-@app.get("/",description="index için router")
-async def api_index():
-    """ 
-    iş servisinin giriş sayfası
-    """
-    return {"Hello": "Job"}
-
+def create_app():
+  app = FastAPI(title="kullanıcı servisi", description="Kullanıcıların bulunduğu servis")
+  app.include_router(usersroute, prefix="/users")
+  return app
 
 
 

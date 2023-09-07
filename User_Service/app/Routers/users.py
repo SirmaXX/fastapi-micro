@@ -20,6 +20,17 @@ def get_db():
         db.close()
 
 
+@usersroute.get("/health",description="servisin çalışıp çalışmadığını kontrol eden router")
+async def health(req: Request): 
+    health=True
+    if health==True:
+        return True
+    else:
+        return None
+
+
+
+
 
 @usersroute.get("/",description=" bütün kullanıcıların sıralandığı fonksiyon")
 async def home(req: Request, db: Session = Depends(get_db)):
