@@ -11,3 +11,4 @@ celery
 Redis
 fastapi_router_controller
 httpx
+PyJWT
