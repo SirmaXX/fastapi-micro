@@ -15,21 +15,6 @@ services:
 
 
 
-  costumer:
-    container_name: costumers
-    image: costumers
-    build: ./Customer_Service
-    volumes:
-      - ./Customer_Service/:/app/
-    expose:
-      - 5001
-    ports:
-      - "5001:5001"
-    environment:
-       - DATABASE_URL=postgresql://postgres:postgres@db:5432/costumers
-    depends_on:
-       - db
-     
     
     
   users:
