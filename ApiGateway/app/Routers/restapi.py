@@ -1,15 +1,19 @@
 
-from fastapi import APIRouter,Depends, Request,HTTPException
+from fastapi import APIRouter,Depends, Request,HTTPException,Response
 from flask import jsonify
 from sqlalchemy.orm import Session
 import urllib,json,requests
-from app.Lib.schema import User_Schema
-from app.Lib.Api_User_Controller import Api_User_Controller
+from app.Schemas.schema import User_Schema
+from app.Controller.Api_User_Controller import Api_User_Controller
 
 from slowapi.errors import RateLimitExceeded
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 
+
+from functools import wraps
+import logging
+from time import gmtime, strftime
 
 limiter = Limiter(key_func=get_remote_address)
 
@@ -24,22 +28,78 @@ Users_Url="http://job:5001/users"
 
 Log_Url="http://log_service:5004/"
 
+now=strftime("%Y-%m-%d %H:%M:%S", gmtime())
+
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+@restapiroute.get("/items/{message}",description="örnek  log requesti")
+async def read_root( request: Request,response: Response,message:str):
+     log_prefix = f"('{request.headers['user-agent']}',{request.client.host}', {request.client.port}) - \"{request.method} {request.url.path} {request.headers['host']}- \"{response.status_code},{now},{message}"
+     return {log_prefix}
+
+
+
+
+def log_session_activity(func):
+    @wraps(func)
+    async def wrapper(request: Request, *args, **kwargs):
+        # Log the session start and end, if needed
+        logger.info(f"Session started: {request.client.host}")
+        url = 'http://log_service:5004/'
+        
+        data = {
+            "logtype": "Info",
+            "user_agent":str( request.headers['user-agent']),
+            "host": str(request.client.host),
+            "port":  str(request.client.port),
+            "method": str(request.method),
+            "path": str(request.url.path),
+            "message": "string",
+            "create_time": str(now)
+        }
+        
+        headers = {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+
+        # Print the data being sent
+        print("Sending data:", data)
+
+        response = requests.post(url, json=data, headers=headers)
+
+        # Check the response status code
+        if response.status_code == 200:
+            response_content = response.text
+            print("Response content:", response_content)
+            responsee = await func(request, *args, **kwargs)
+            logger.info(f"Session ended: {request.client.host} {request.method} {request.url.path} {request.headers['host']}")
+            return responsee
+        else:
+            print('Request failed with status code:', response.status_code)
+            log_prefix = f"{request.client.host} - \"{request.method} {request.url.path} {request.headers['host']}\""
+            print(log_prefix)
+
+    return wrapper
 
 
 
 
 @restapiroute.get("/home")
+@log_session_activity
 @limiter.limit("5/minute")
-async def homepage(request: Request):
+async def homepage(request: Request, response: Response):
     return { "message": "hello world" }
-
-
 
 
 
 @restapiroute.get("/")
 @restapiroute.get("/index")
-async def api_index(request: Request):
+@log_session_activity
+async def api_index(request: Request ,response: Response):
    return {"rest api service"}
 
 

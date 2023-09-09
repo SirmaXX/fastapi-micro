@@ -45,7 +45,14 @@ def verify_password(input_password, hashed_password):
 @usersroute.get("/roles/")
 async def get_roles(db: Session = Depends(get_db)):
     roles = db.query(Role).all()
-    return roles
+    if roles != None:
+        return roles
+    else :
+        raise HTTPException(status_code=404, detail="rolbulunamadı")
+    
+
+
+
 
 
 @usersroute.post("/roles/")
@@ -111,6 +118,8 @@ async def add_user(user:UserCreate,req: Request,db: Session = Depends(get_db)):
 
 
 
+
+
 @usersroute.delete("/softdelete/{id}", description="kullanıcının bilgilerini silen fonksiyon")
 async def change_user_status(user_id: int, new_status: bool, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.ID == user_id).first()
@@ -146,3 +155,19 @@ async def update_user(id: int, user_update: UserCreate, db: Session = Depends(ge
         return user
     else:
          raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı")
+    
+
+
+
+@usersroute.get("/usercheckroles/{user_id}")
+async def get_user_roles(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.ID == user_id).first()
+
+    if user is None:
+        return []
+    else :
+        return user.role.role_name
+
+    
+
+
