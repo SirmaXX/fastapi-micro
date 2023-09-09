@@ -5,85 +5,23 @@ from sqlalchemy.orm import Session
 import urllib,json,requests
 from app.Schemas.schema import User_Schema
 from app.Controller.Api_User_Controller import Api_User_Controller
-
+from pydantic import BaseModel
 from slowapi.errors import RateLimitExceeded
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
+from fastapi.responses import JSONResponse
 
 
-from functools import wraps
-import logging
-from time import gmtime, strftime
+from app.Lib.helper import log_session_activity
+
 
 limiter = Limiter(key_func=get_remote_address)
-
 restapiroute = APIRouter(responses={404: {"description": "Not found"}})
 
 
 
-
-
-
-Users_Url="http://job:5001/users"
-
+Users_Url="http://users:5002/users/"
 Log_Url="http://log_service:5004/"
-
-now=strftime("%Y-%m-%d %H:%M:%S", gmtime())
-
-
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-@restapiroute.get("/items/{message}",description="örnek  log requesti")
-async def read_root( request: Request,response: Response,message:str):
-     log_prefix = f"('{request.headers['user-agent']}',{request.client.host}', {request.client.port}) - \"{request.method} {request.url.path} {request.headers['host']}- \"{response.status_code},{now},{message}"
-     return {log_prefix}
-
-
-
-
-def log_session_activity(func):
-    @wraps(func)
-    async def wrapper(request: Request, *args, **kwargs):
-        # Log the session start and end, if needed
-        logger.info(f"Session started: {request.client.host}")
-        url = 'http://log_service:5004/'
-        
-        data = {
-            "logtype": "Info",
-            "user_agent":str( request.headers['user-agent']),
-            "host": str(request.client.host),
-            "port":  str(request.client.port),
-            "method": str(request.method),
-            "path": str(request.url.path),
-            "message": "string",
-            "create_time": str(now)
-        }
-        
-        headers = {
-            'accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-
-        # Print the data being sent
-        print("Sending data:", data)
-
-        response = requests.post(url, json=data, headers=headers)
-
-        # Check the response status code
-        if response.status_code == 200:
-            response_content = response.text
-            print("Response content:", response_content)
-            responsee = await func(request, *args, **kwargs)
-            logger.info(f"Session ended: {request.client.host} {request.method} {request.url.path} {request.headers['host']}")
-            return responsee
-        else:
-            print('Request failed with status code:', response.status_code)
-            log_prefix = f"{request.client.host} - \"{request.method} {request.url.path} {request.headers['host']}\""
-            print(log_prefix)
-
-    return wrapper
 
 
 
@@ -107,12 +45,19 @@ async def api_index(request: Request ,response: Response):
 
 @restapiroute.get("/users",description="Kullanıcıların bulunduğu liste")
 async def users_panel(request: Request):
-    Api_User_Controller.GetUsers(Users_Url)
+    return  Api_User_Controller.GetUsers(Users_Url)
 
 
-@restapiroute.post("/adduser",description="kullanıcı ekleme fonksiyonu")
-async def createuser(request: Request,user:User_Schema):  
-     Api_User_Controller.AddUser(user.username,user.password,Users_Url)
+
+
+@restapiroute.post("/adduser", description="kullanıcı ekleme fonksiyonu")
+async def createuser(request: Request, user: User_Schema):
+    response = Api_User_Controller.AddUser(user.Name,user.User_name,user.user_email ,user.Pass, Users_Url)
+    
+    if response.status_code == 200:
+        return {"message": "User created successfully"}
+    else:
+        raise HTTPException(status_code=response.status_code, detail="User creation failed")
 
 
 @restapiroute.get("/deleteuser/{id}",description="kullanıcı silme fonksiyonu")
@@ -132,26 +77,21 @@ async def updateuser(request: Request,id:int):
     
 @restapiroute.post("/updateuser/{id}",description="kullanıcı adı ")
 async def updateuser(request: Request,id:int,user:User_Schema):
-    Api_User_Controller.Post_UpdateUser(id,user.username,user.password)
+  return  Api_User_Controller.Post_UpdateUser(id,user.Name,user.User_name,user.user_email ,user.Pass,user.user_status, Users_Url)
        
 
 
 
-
-
-
-@restapiroute.post("/logincheck", description="kullanıcınun bilgilerini kontrol eden  fonksiyon ")
-async def logincheck(request: Request,username:str,password:str):
-        json_user={"username": username , "password": password }
-        checklogin=requests.post("http://job:5001/users/login", json =json_user)
-        if (checklogin.text =="true"):
-           return True   
-        else:
-          return False
+ #@restapiroute.post("/logincheck", description="kullanıcınun bilgilerini kontrol eden  fonksiyon ")
+#async def logincheck(request: Request,username:str,password:str):
+ #       json_user={"username": username , "password": password }
+ #       checklogin=requests.post("http://job:5001/users/login", json =json_user)
+ #       if (checklogin.text =="true"):
+ #          return True   
+ #       else:
+ #         return False
        
         
-
-
 
 
 #LOGLAR
@@ -161,3 +101,77 @@ async def logs(request: Request):
     data = response.read()
     dict = json.loads(data)
     return dict
+
+
+
+#PERMİSSİONLAR
+@restapiroute.get("/permission",description="logların bulunduğu fonksiyon")
+async def permission(request: Request):
+    response = urllib.request.urlopen(Users_Url+"permissions/")
+    data = response.read()
+    dict = json.loads(data)
+    return dict
+
+
+
+@restapiroute.post("/permission",description="logların bulunduğu fonksiyon")
+async def permission_post(request: Request):
+    my_json = { "permission_name": "string"}
+    url=Users_Url+"permissions/"
+    response = requests.post(url, json =my_json)
+    if response.status_code == 200:
+        return {"message": "Permission created successfully"}
+    else:
+        raise HTTPException(status_code=response.status_code, detail="Permission creation failed")
+
+
+
+
+
+
+@restapiroute.get("/deletepermission/{id}", description="kullanıcı silme fonksiyonu")
+async def deletepermission(request: Request, id: int):
+    url = Users_Url + 'permissions/delete/' + str(id)
+    response = requests.delete(url)
+    
+    if response.status_code == 200:
+        return JSONResponse(content=response.json())
+    else:
+        return JSONResponse(content={"error": "DELETE request failed"}, status_code=response.status_code)
+
+
+
+#ROLES
+@restapiroute.get("/roles",description="logların bulunduğu fonksiyon")
+async def roles(request: Request):
+    response = urllib.request.urlopen(Users_Url+"roles/")
+    data = response.read()
+    dict = json.loads(data)
+    return dict
+
+
+
+@restapiroute.post("/roles",description="logların bulunduğu fonksiyon")
+async def roles_post(request: Request):
+    my_json = {
+  "role_name": "deneme"
+}
+    url=Users_Url+'roles/'
+    response = requests.post(url, json =my_json)
+    if response.status_code == 200:
+        return {"message": "Roles created successfully"}
+    else:
+        raise HTTPException(status_code=response.status_code, detail="User creation failed")
+
+
+
+
+@restapiroute.get("/deleteroles/{id}", description="kullanıcı rolünü silme fonksiyonu")
+async def deleteroles(request: Request, id: int):
+    url = Users_Url + 'roles/delete/' + str(id)
+    response = requests.delete(url)
+    
+    if response.status_code == 200:
+        return JSONResponse(content=response.json())
+    else:
+        return JSONResponse(content={"error": "DELETE request failed"}, status_code=response.status_code)

@@ -52,9 +52,6 @@ async def get_roles(db: Session = Depends(get_db)):
     
 
 
-
-
-
 @usersroute.post("/roles/")
 async def create_role(role: RoleCreate, db: Session = Depends(get_db)):
     db_role = Role(**role.dict())
@@ -62,6 +59,19 @@ async def create_role(role: RoleCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_role)
     return db_role
+
+
+
+@usersroute.delete("/roles/delete/{id}", description="kullanıcının rolünü silen fonksiyon")
+async def del_roles(req: Request, id: int, db: Session = Depends(get_db)):
+    role = db.query(Role).filter_by(role_id=id).first()
+    if role is not None:
+        db.delete(role)
+        db.commit()
+        return role
+    else:
+        raise HTTPException(status_code=404, detail="Rol bulunamadı")
+
 
 
 @usersroute.get("/permissions/")
@@ -78,6 +88,16 @@ async def create_permission(permission: PermissionCreate, db: Session = Depends(
     return db_permission
 
 
+
+@usersroute.delete("/permissions/delete/{id}", description="kullanıcının bilgilerini silen fonksiyon")
+async def del_permission(req: Request, id: int, db: Session = Depends(get_db)):
+    permission = db.query(Permission).filter_by(permission_id=id).first()
+    if permission is not None:
+        db.delete(permission)
+        db.commit()
+    else:
+       raise HTTPException(status_code=404, detail="İzin bulunamadı")
+    
 
 @usersroute.get("/health",description="servisin çalışıp çalışmadığını kontrol eden router")
 async def health(req: Request): 
@@ -104,7 +124,7 @@ async def home(req: Request, db: Session = Depends(get_db)):
 
 @usersroute.post("/add",description="kullanıcı ekleme fonksiyonu")
 async def add_user(user:UserCreate,req: Request,db: Session = Depends(get_db)):
-    hashed_password = hash_password(user.password)
+    hashed_password = hash_password(user.Pass)
     user.Pass=hashed_password
      # Create a new User instance with the provided data
     new_user = User(**user.dict())

@@ -3,11 +3,15 @@ from pydantic import BaseModel
 from typing import Optional
 
 class User_Schema(BaseModel):
-    username : str
-    password : str
+   Name:str
+   User_name: str
+   user_email: str
+   Pass: str
+   user_status: bool
+ 
  
 
     
-    class Config:
+   class Config:
         from_attributes = True
 

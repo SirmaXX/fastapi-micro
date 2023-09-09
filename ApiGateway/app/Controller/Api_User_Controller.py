@@ -13,40 +13,43 @@ from datetime import datetime
 
 
 class Api_User_Controller:
-
+  @staticmethod
   def GetUsers(url:str):
     response = urllib.request.urlopen(url)
     data = response.read()
     dictt = json.loads(data)
-    createLog("Info","kullanıcılar çağırıldı")
+    #createLog("Info","kullanıcılar çağırıldı")
     return dictt
 
 
-  def AddUser(username:str,password:str,url:str):
-     my_json={"username":username,"password": password}    
-     response= requests.post(url+"/add", json =my_json)
-     return response
+
+  
+  @staticmethod
+  def AddUser(Name: str,User_name: str, user_email:str,Pass: str, url: str):
+        my_json = {"Name": Name,"User_name": User_name,"user_email":user_email, "Pass": Pass, "user_status": True}    
+        response = requests.post(url + "add", json=my_json)
+        return response
   
    
  
   def DeleteUser(Users_Url:str,id:int):
-     url=Users_Url+'/delete/'+str(id)
+     url=Users_Url+'delete/'+str(id)
      response = requests.delete(url)
      return response
 
  
   def GetUser(Users_Url:str,id:int):
-     url=Users_Url+'/'+str(id)
+     url=Users_Url+str(id)
      response = urllib.request.urlopen(url)
      data = response.read()
      dictionary = json.loads(data)
      return dictionary
 
 
-  def Post_UpdateUser(id:int,username:str,password:str):
-    json_user={"username": username , "password": password }
-    url='http://job:5001/users/update/'+str(id)
-    response = requests.put(url, json =json_user)
+  def Post_UpdateUser(id:int,Name: str,User_name: str, user_email:str,Pass: str,user_status:bool,Users_Url:str):
+    my_json = {"Name": Name,"User_name": User_name,"user_email":user_email, "Pass": Pass, "user_status": user_status}  
+    url=Users_Url+'update/'+str(id)
+    response = requests.put(url, json =my_json)
     return response
 
 
