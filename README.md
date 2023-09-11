@@ -34,9 +34,14 @@ https://github.com/SirmaXX/fastapi-micro/blob/main/ApiGateway/app/main.py#L24
 
 ## rate limit örneği
 
-
 https://github.com/SirmaXX/fastapi-micro/blob/main/ApiGateway/app/Routers/restapi.py#L31
 
+## tokenizasyon örneği 
+kullanıcı servisi
+https://github.com/SirmaXX/fastapi-micro/blob/main/User_Service/app/Routers/users.py#L232
+
+apigateway
+https://github.com/SirmaXX/fastapi-micro/blob/main/ApiGateway/app/Routers/restapi.py#L91
 
 ## Kaynakça
 
