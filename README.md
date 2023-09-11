@@ -20,10 +20,13 @@ Aşağıdaki  komutları yazarak projeyi çalıştırabilirsiniz.
 # Postman verisine nasıl erişilir
 DenemeJsonCollection.postman_collection.json'ı postman'e entegre ederek kullanabilirsiniz
 
+# Testler nasıl çalıştırılır
+Servislerdeki test_main.py  dosyalarını
+Aşağıdaki komut satırlarını sıra ile yazarak,backend servisi containerına erişerek unit testleri çalıştırabilirsiniz.
 
+sudo docker exec -it "servismi" /bin/bash
 
-
-
+pytest
 ## Kaynakça
 
 https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
