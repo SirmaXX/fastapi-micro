@@ -27,6 +27,17 @@ Aşağıdaki komut satırlarını sıra ile yazarak,backend servisi containerın
 sudo docker exec -it "servismi" /bin/bash
 
 pytest
+
+
+### ip whitelist  örneği 
+https://github.com/SirmaXX/fastapi-micro/blob/main/ApiGateway/app/main.py#L24
+
+## rate limit örneği
+
+
+https://github.com/SirmaXX/fastapi-micro/blob/main/ApiGateway/app/Routers/restapi.py#L31
+
+
 ## Kaynakça
 
 https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
