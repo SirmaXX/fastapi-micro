@@ -19,13 +19,13 @@ async def distinct_log():
     return serializeList(conn.testlogdb.log.find())
 
 
-@log.get('/different/', description="Logları listeleyen request")
+@log.get('/different/', description="Farklı user agentları listeleyen request")
 async def distinct_log():
     distinct_user_agents = conn.testlogdb.log.distinct('user_agent')
     return distinct_user_agents
 
 
-@log.get('/differentcount/', description="Logları listeleyen request")
+@log.get('/differentcount/', description="Farklı user agentları sayıları ile birlikte listeleyen request")
 async def distinct_log():
     pipeline = [
         {

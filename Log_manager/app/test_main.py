@@ -35,11 +35,6 @@ def test_post_log():
     assert response.json() == "null"
 
 
-
-
-
-
-
 def test_delete_log():
     response = client.delete("/delete/2")
     assert response.status_code == 200
