@@ -12,3 +12,5 @@ Redis
 fastapi_router_controller
 httpx
 PyJWT
+python-jose[cryptography]
+passlib

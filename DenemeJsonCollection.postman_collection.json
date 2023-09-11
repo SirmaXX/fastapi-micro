@@ -1,0 +1,314 @@
+{
+	"info": {
+		"_postman_id": "b96953d1-30ca-471c-a379-1d470965367c",
+		"name": "DenemeJsonCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "2594661"
+	},
+	"item": [
+		{
+			"name": "apigateway",
+			"item": [
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "http://0.0.0.0:5003/v1/api/users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://0.0.0.0:5003/v1/api/users"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "logs",
+					"item": [
+						{
+							"name": "http://0.0.0.0:5003/v1/api/logs",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://0.0.0.0:5003/v1/api/logs"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "permissions",
+					"item": [
+						{
+							"name": "http://0.0.0.0:5003/v1/api/permission",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://0.0.0.0:5003/v1/api/permission"
+							},
+							"response": []
+						},
+						{
+							"name": "http://0.0.0.0:5003/v1/api/deletepermission/3",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://0.0.0.0:5003/v1/api/deletepermission/3"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "roles",
+					"item": [
+						{
+							"name": "http://0.0.0.0:5003/v1/api/roles",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://0.0.0.0:5003/v1/api/roles"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "home",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Log_Service",
+			"item": [
+				{
+					"name": "row columns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://0.0.0.0:5004/"
+					},
+					"response": []
+				},
+				{
+					"name": "http://0.0.0.0:5004/",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"logtype\": \"Info\",\n  \"user_agent\": \"string\",\n  \"host\": \"string\",\n  \"port\": \"string\",\n  \"method\": \"string\",\n  \"path\": \"string\",\n  \"message\": \"string\",\n  \"create_time\": \"2023-09-10T02:35:50.944Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://0.0.0.0:5004/"
+					},
+					"response": []
+				},
+				{
+					"name": "http://0.0.0.0:5004/1",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"logtype\": \"Info\",\n  \"user_agent\": \"string\",\n  \"host\": \"string\",\n  \"port\": \"string\",\n  \"method\": \"string\",\n  \"path\": \"string\",\n  \"message\": \"string\",\n  \"create_time\": \"2023-09-10T02:37:10.302Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://0.0.0.0:5004/1"
+					},
+					"response": []
+				},
+				{
+					"name": "http://0.0.0.0:5004/1",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://0.0.0.0:5004/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User_Service",
+			"item": [
+				{
+					"name": "roles",
+					"item": [
+						{
+							"name": "/users/roles/",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://0.0.0.0:5002/users/roles/"
+							},
+							"response": []
+						},
+						{
+							"name": "users/roles/",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"role_name\": \"string12\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://0.0.0.0:5002/users/roles/"
+							},
+							"response": []
+						},
+						{
+							"name": "/users/roles/delete/{id}",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "http://0.0.0.0:5002/users/roles/delete/3"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "permissions",
+					"item": [
+						{
+							"name": "/users/permissions/",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://0.0.0.0:5002/users/permissions/"
+							},
+							"response": []
+						},
+						{
+							"name": "/users/permissions/",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"permission_name\": \"string123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://0.0.0.0:5002/users/permissions/"
+							},
+							"response": []
+						},
+						{
+							"name": "/users/permissions/delete/{id}",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "http://0.0.0.0:5002/users/permissions/delete/1"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "/users/usercheckroles/{user_id}",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://0.0.0.0:5002/users/usercheckroles/1"
+							},
+							"response": []
+						},
+						{
+							"name": "http://0.0.0.0:5002/users/update/1",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"Name\": \"string\",\n  \"User_name\": \"string\",\n  \"user_email\": \"string\",\n  \"Pass\": \"string\",\n  \"user_status\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://0.0.0.0:5002/users/update/1"
+							},
+							"response": []
+						},
+						{
+							"name": "http://0.0.0.0:5002/users/delete/1",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "http://0.0.0.0:5002/users/delete/1"
+							},
+							"response": []
+						},
+						{
+							"name": "http://0.0.0.0:5002/users/softdelete/1",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "http://0.0.0.0:5002/users/softdelete/1"
+							},
+							"response": []
+						},
+						{
+							"name": "http://0.0.0.0:5002/users/add",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"Name\": \"string\",\n  \"User_name\": \"string\",\n  \"user_email\": \"string\",\n  \"Pass\": \"string\",\n  \"user_status\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://0.0.0.0:5002/users/add"
+							},
+							"response": []
+						},
+						{
+							"name": "http://0.0.0.0:5002/users/",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://0.0.0.0:5002/users/"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

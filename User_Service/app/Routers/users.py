@@ -2,20 +2,33 @@
 from fastapi import APIRouter,Depends, Request,HTTPException
 from flask import jsonify
 from sqlalchemy.orm import Session
-import json
 from app.Models.models import SessionLocal,User,Role,Permission
-from app.Schemas.schema import UserCreate,RoleCreate,PermissionCreate
-
-
-
-
+from app.Schemas.schema import UserCreate,RoleCreate,PermissionCreate,Token
+from pydantic import BaseModel
 import hashlib
 import jwt
-from fastapi.encoders import jsonable_encoder
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from datetime import datetime, timedelta
+from jose import JWTError, jwt
+
+
 
 from datetime import datetime
 
+
+
 usersroute = APIRouter(responses={404: {"description": "Not found"}})
+
+
+SECRET_KEY = "your-secret-key"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 
 
@@ -48,7 +61,7 @@ async def get_roles(db: Session = Depends(get_db)):
     if roles != None:
         return roles
     else :
-        raise HTTPException(status_code=404, detail="rolbulunamadı")
+        raise HTTPException(status_code=404, detail="rol bulunamadı")
     
 
 
@@ -191,3 +204,48 @@ async def get_user_roles(user_id: int, db: Session = Depends(get_db)):
     
 
 
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Could not validate credentials")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Could not validate credentials")
+    return username
+
+
+
+def create_access_token(data: dict, expires_delta: timedelta = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+
+
+
+@usersroute.post("/login", response_model=Token, description="Kullanıcının logini için oluşturulan endpoint")
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.User_name == form_data.username).first()
+    if db_user and verify_password(form_data.password, db_user.Pass):
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": form_data.username}, expires_delta=access_token_expires
+        )
+        return {"access_token": access_token, "token_type": "bearer"}
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Incorrect username or password",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+
+@usersroute.get("/protected", description="örnek endpoint")
+async def protected_endpoint(current_user: str = Depends(get_current_user)):
+    # Your protected endpoint logic here
+    return {"message": f"Hello, {current_user}! This is a protected endpoint."}

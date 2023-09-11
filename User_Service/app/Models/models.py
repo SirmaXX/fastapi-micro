@@ -90,33 +90,27 @@ class User(Base):
 
 
 
-# Create a Role object
-role = Role(
-    role_name="Admin"
-)
-
-# Create a Permission object
-permission = Permission(
-    permission_name="Create User"
-)
 
 
 
 
-# Create instances of your model classes
-user1 = User(Name="User1", User_name="user1", user_email="user1@example.com", Pass="password123")
+# kullanıcı tanımlama 
+user1 = User(Name="user1", User_name="string", user_email="user1@example.com", Pass="0a041b9462caa4a31bac3567e0b6e6fd9100787db2ab433d96f6d178cabfce90")
 user2 = User(Name="User2", User_name="user2", user_email="user2@example.com", Pass="password456")
 
+#örnek rol tanımlama
 role1 = Role(role_name="Admin")
 role2 = Role(role_name="User")
 
+#örnek izin tanımlama
 permission1 = Permission(permission_name="Edit")
 permission2 = Permission(permission_name="View")
 
-# Assign roles and permissions to users (modify this part as needed)
+#kullanıcılara örnek rol ataması
 user1.role = role1
 user2.role = role2
 
+#rollere izin atanması örnek
 role1.permissions = [permission1]
 role2.permissions = [permission2]
 

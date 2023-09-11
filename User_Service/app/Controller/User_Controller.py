@@ -53,7 +53,8 @@ class UserController:
             return False
 
         
-            return False
+           
+           
 
   def create_user(db: Session, user: UserCreate):
     hashed_password = hash_password(user.password)

@@ -1,6 +1,5 @@
 FROM python:3.10
-# Set the working directory to /app
-# Set the working directory to /app
+
 # Set the working directory to /app
 WORKDIR /app
 
@@ -8,12 +7,11 @@ WORKDIR /app
 COPY requirements.txt .
 COPY main.py .
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Upgrade pip and install packages from requirements.txt in a single RUN command
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the app into the container
 COPY . .
-
 
 EXPOSE 5002
 

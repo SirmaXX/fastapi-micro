@@ -52,6 +52,7 @@ class UserBase(BaseModel):
     user_email: str
     Pass: str
     user_status: bool
+   
 
 class UserCreate(UserBase):
     pass
@@ -64,3 +65,15 @@ class User(UserBase):
 
     class Config:
         from_attributes = True
+
+
+
+class User_Login(BaseModel):
+    User_name : str
+    Pass : str
+    
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
